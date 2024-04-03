@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 import argparse
 import os
-import json
 import sys
 
 import requests
@@ -8,7 +8,6 @@ import requests
 
 LIGHT_IP = os.environ.get('ELGATO_LIGHT_IP', '192.168.68.117')
 
-# Create a new requests session:
 _http_timeout = 5
 _base_url = f"http://{LIGHT_IP}:9123"
 
@@ -39,7 +38,7 @@ class ElgatoLight:
         self._update()
 
     def _update(self):
-        response = session.get(f"http://{self.ip_address}:9123/elgato/lights")
+        response = session.get(f"http://{self.ip_address}:9123/elgato/lights", timeout=_http_timeout)
         data = response.json()
         lights = data.get('lights', [])
         if len(lights) <= 0:
@@ -57,7 +56,7 @@ class ElgatoLight:
                 }
             ]
         }
-        response = session.put(f"{_base_url}/elgato/lights", json=query)
+        response = session.put(f"{_base_url}/elgato/lights", json=query, timeout=_http_timeout)
         self._update()
 
     def toggle(self):
@@ -77,7 +76,7 @@ class ElgatoLight:
                 }
             ]
         }
-        response = session.put(f"{_base_url}/elgato/lights", json=query)
+        response = session.put(f"{_base_url}/elgato/lights", json=query, timeout=_http_timeout)
         self._update()
 
     def _set_temperature(self, temperature):
@@ -88,7 +87,7 @@ class ElgatoLight:
                 }
             ]
         }
-        response = session.put(f"{_base_url}/elgato/lights", json=query)
+        response = session.put(f"{_base_url}/elgato/lights", json=query, timeout=_http_timeout)
         self._update()
 
     def _set_scene(self, temp, brightness):
@@ -100,7 +99,7 @@ class ElgatoLight:
                 }
             ]
         }
-        response = session.put(f"{_base_url}/elgato/lights", json=query)
+        response = session.put(f"{_base_url}/elgato/lights", json=query, timeout=_http_timeout)
         self._update()
 
     def bright(self):
